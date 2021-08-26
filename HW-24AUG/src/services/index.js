@@ -1,13 +1,13 @@
 import { Router } from "express";
 
-import authorsRoutes from "./authors/routes.js";
+import productsRoutes from "./products/routes.js";
 
-import blogsRoutes from "./blogs/routes.js";
+import reviewRoutes from "./review/routes.js";
 
 const route = Router();
 
-route.use("/authors", authorsRoutes);
+route.use("/products", productsRoutes);
 
-route.use("/blogs", blogsRoutes);
+route.use("/review", reviewRoutes);
 
 export default route;
