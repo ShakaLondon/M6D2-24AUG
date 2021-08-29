@@ -11,9 +11,9 @@ const { Pool } = pg;
 
 console.log(process.env.NODE_ENV);
 const db = new Pool({
-	ssl: {
-		rejectUnauthorized: false,
-	},
+	// ssl: {
+	// 	rejectUnauthorized: false,
+	// },
 	connectionString:
 		process.env.NODE_ENV !== "development"
 			? process.env.DATABASE_URL
