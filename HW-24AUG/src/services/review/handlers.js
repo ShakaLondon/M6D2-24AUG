@@ -4,6 +4,10 @@ import db from "../../db/connection.js";
 export const list = async (req, res, next) => {
 	try {
 		const reviews = await db.query(`SELECT 
+		review.review_id,
+		review.comment,
+		review.rate,
+		review.product_id,
 		products.product_id,
 		products.name,
 		products.description,
@@ -11,13 +15,10 @@ export const list = async (req, res, next) => {
 		products.image_url,
 		products.price,
 		products.category,
-		products.created_at,
-		review.review_id,
-		review.comment,
-		review.rate,
-		review.product_id
-		FROM reviews AS review
-		INNER JOIN products AS product ON review.product_id=product.product_id ORDER BY review.created_at DESC;`);
+		products.created_at
+		FROM review AS r
+		INNER JOIN products AS p ON r.product_id=p.product_id 
+		ORDER BY p.created_at DESC;`);
 		res.send(reviews.rows);
 	} catch (error) {
 		res.status(500).send(error);
@@ -30,7 +31,7 @@ export const create = async (req, res, next) => {
 			comment, rate, product_id, created_at
 		} = req.body;
 		const reviews = await db.query(
-			`INSERT INTO review(comment, rate, product_id, created_at) VALUES('${comment}','${rate}','${product_id}','${created_at}') RETURNING *;`
+			`INSERT INTO review(comment, rate, product_id) VALUES('${comment}','${rate}','${product_id}') RETURNING *;`
 		);
 		res.send(reviews.rows[0]);
 	} catch (error) {
