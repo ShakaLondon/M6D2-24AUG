@@ -70,3 +70,21 @@ export const deleteProduct = async (req, res, next) => {
 		res.status(500).send(error);
 	}
 };
+
+export const updateProductImage = async (req, res, next) => {
+	try {
+		const { product_id } = req.params;
+		// const { name, description, brand, image_url, price, category } = req.body;
+		const products = await db.query(
+			`UPDATE products
+			 SET 
+			 image_url = '${req.file}',
+			 updated_at = NOW()
+			 WHERE product_id=${product_id} RETURNING *;`
+		);
+		const [found, ...rest] = products.rows;
+		res.status(found ? 200 : 400).send(found);
+	} catch (error) {
+		res.status(500).send(error);
+	}
+};
