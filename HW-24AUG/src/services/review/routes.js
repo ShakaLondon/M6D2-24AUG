@@ -6,11 +6,11 @@ const route = Router();
 
 route.get("/", reviewHandlers.list);
 
-route.get("/:blog_id", reviewHandlers.single);
+route.get("/:review_id", reviewHandlers.single);
 
-route.put("/:blog_id", reviewHandlers.update);
+route.put("/:review_id", reviewHandlers.update);
 
-route.delete("/:blog_id", reviewHandlers.deleteReview);
+route.delete("/:review_id", reviewHandlers.deleteReview);
 
 route.post("/", reviewHandlers.create);
 

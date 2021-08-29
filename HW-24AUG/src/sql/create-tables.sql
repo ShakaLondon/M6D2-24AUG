@@ -25,5 +25,6 @@ CREATE TABLE
 			comment VARCHAR(500) NOT NULL,
 			rate INTEGER CHECK (rate < 6) NOT NULL,
 			product_id INTEGER NOT NULL,
-			created_at TIMESTAMPTZ DEFAULT NOW()
+			created_at TIMESTAMPTZ DEFAULT NOW(),
+			updated_at TIMESTAMPTZ DEFAULT NOW()
 	);

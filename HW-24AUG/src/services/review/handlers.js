@@ -8,6 +8,7 @@ export const list = async (req, res, next) => {
 		review.comment,
 		review.rate,
 		review.product_id,
+		review.created_at,
 		products.product_id,
 		products.name,
 		products.description,
@@ -16,9 +17,9 @@ export const list = async (req, res, next) => {
 		products.price,
 		products.category,
 		products.created_at
-		FROM review AS r
-		INNER JOIN products AS p ON r.product_id=p.product_id 
-		ORDER BY p.created_at DESC;`);
+		FROM review 
+		INNER JOIN products ON review.product_id=products.product_id
+		ORDER BY products.created_at DESC;`);
 		res.send(reviews.rows);
 	} catch (error) {
 		res.status(500).send(error);
@@ -44,6 +45,11 @@ export const single = async (req, res, next) => {
 		const { review_id } = req.params;
 		const reviews = await db.query(
 			`SELECT 
+			review.review_id,
+			review.comment,
+			review.rate,
+			review.product_id,
+			review.created_at,
 			products.product_id,
 			products.name,
 			products.description,
@@ -51,16 +57,13 @@ export const single = async (req, res, next) => {
 			products.image_url,
 			products.price,
 			products.category,
-			products.created_at,
-			review.review_id,
-			review.comment,
-			review.rate,
-			review.product_id
-			FROM reviews AS review
-			INNER JOIN products AS product ON review.product_id=product.product_id 
-			WHERE review.product_id = '${review_id}'
+			products.created_at
+			FROM review
+			INNER JOIN products ON review.product_id=products.product_id 
+			WHERE review.review_id = '${review_id}'
 			ORDER BY review.created_at DESC;`
 		);
+
 		const [found, ...rest] = reviews.rows;
 
 		res.status(found ? 200 : 404).send(found);
@@ -84,7 +87,7 @@ export const update = async (req, res, next) => {
 			 SET
 			 comment='${comment}',
 			 rate='${rate}',
-			 product_id='${product_id}'
+			 product_id='${product_id}',
 			 updated_at = NOW()
 			 WHERE review_id=${review_id} RETURNING *;`
 		);
@@ -102,7 +105,7 @@ export const deleteReview = async (req, res, next) => {
 		const { review_id } = req.params;
 
 		const dbResult = await db.query(
-			`DELETE FROM blogs
+			`DELETE FROM review
 			 WHERE review_id=${review_id};`
 		);
 		res.status(dbResult.rowCount ? 200 : 400).send();
